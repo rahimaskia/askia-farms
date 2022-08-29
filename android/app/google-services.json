@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "426121446164",
+    "project_id": "askia-farms",
+    "storage_bucket": "askia-farms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:426121446164:android:59b244918ad3f02c277801",
+        "android_client_info": {
+          "package_name": "com.askia.farms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "426121446164-796gjk6n02fmcke1ubs7o06srnou58jv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiBB_MV7F7sETZVVZ0HJp_YRvEwb5KkVU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "426121446164-796gjk6n02fmcke1ubs7o06srnou58jv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "426121446164-e1ar9ogddi8ndboe913q28o0nuhrmnlm.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.askia.farms"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
