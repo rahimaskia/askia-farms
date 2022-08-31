@@ -251,14 +251,9 @@ class _NewFeedState extends State<NewFeed> {
                                   "It's ${feed.type} time",
                                   """Don't forget to feed your birds. 
                                 This is the time to feed them ${feed.type}""",
-                                  rand,
-                                  DateTime.now()
-                                      .add(Duration(
-                                          hours: time.hour,
-                                          minutes: time.minute))
-                                      .millisecondsSinceEpoch,
-                                  channel: 'feed',
-                                  sound: 'workend.mp3');
+                                  channel: 'feed_channel',
+                                  id: rand,
+                                  time: time.hour * time.minute);
                               form.reset();
                               _supplier = null;
                               setState(() => _loading = false);

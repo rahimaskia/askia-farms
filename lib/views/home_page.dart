@@ -10,7 +10,8 @@ import 'partials/products_view.dart';
 import 'products_search_delegate.dart';
 
 class Homepage extends StatelessWidget {
-  Homepage({Key? key}) : super(key: key);
+  Homepage({Key? key, this.index}) : super(key: key);
+  final int? index;
 
   final _user = FirebaseAuth.instance.currentUser;
 
@@ -36,27 +37,23 @@ class Homepage extends StatelessWidget {
               child: Text('Failed to fetch products'),
             ));
           }
-          debugPrint('${snapshot.data?.exists}, User: ${_user?.uid}');
           if (!snapshot.hasData || !(snapshot.data?.exists ?? true)) {
             return MarketPlace(user: _user);
           }
-          return const Dashboard();
+          return Dashboard(index: index);
         });
   }
 }
 
-class MarketPlace extends StatefulWidget {
-  const MarketPlace({
+class MarketPlace extends StatelessWidget {
+  MarketPlace({
     Key? key,
     required this.user,
+    this.isAdmin = false,
   }) : super(key: key);
   final User? user;
+  final bool isAdmin;
 
-  @override
-  State<MarketPlace> createState() => _MarketPlaceState();
-}
-
-class _MarketPlaceState extends State<MarketPlace> {
   final bool _isGrid = true;
 
   // Menus for a normal user
@@ -68,23 +65,25 @@ class _MarketPlaceState extends State<MarketPlace> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(title: const Text('Askia Farms'), actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 10.0),
-            child: IconButton(
-                onPressed: () async {
-                  final product = await showSearch<Product>(
-                      context: context, delegate: ProductsSearchDelegate());
-                  if (product != null) {
-                    ProductsView.showSheet(context, product);
-                  }
-                },
-                icon: const Icon(
-                  Icons.search,
-                )),
-          ),
-          MenuPopup(menus: _menus, user: widget.user)
-        ]),
+        appBar: AppBar(
+            title: Text(isAdmin ? 'Marketplace' : 'Askia Farms'),
+            actions: [
+              Container(
+                margin: const EdgeInsets.only(right: 10.0),
+                child: IconButton(
+                    onPressed: () async {
+                      final product = await showSearch<Product>(
+                          context: context, delegate: ProductsSearchDelegate());
+                      if (product != null) {
+                        ProductsView.showSheet(context, product);
+                      }
+                    },
+                    icon: const Icon(
+                      Icons.search,
+                    )),
+              ),
+              if (!isAdmin) MenuPopup(menus: _menus, user: user)
+            ]),
         body: SingleChildScrollView(
           child: ProductsView(isList: !_isGrid),
         ));

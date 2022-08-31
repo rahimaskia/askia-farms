@@ -193,12 +193,13 @@ class _NewDrugState extends State<NewDrug> {
                             final ref =
                                 FirebaseFirestore.instance.collection('drugs');
                             ref.add(drug.toMap()).then((value) {
-                              NotificationService().notifyMonthly(
+                              NotificationService().notify(
                                   'Medication Time',
                                   '''You have a ${drug.type} medication to give today. 
                                   Administer the drug to ensure a healthy farm :)''',
-                                  id,
-                                  sound: 'restend.mp3');
+                                  id: id,
+                                  time: 2628288, // Schedule for a month
+                                  channel: 'drug_channel');
                               form.reset();
                               _supplier = null;
                               setState(() => _loading = false);
