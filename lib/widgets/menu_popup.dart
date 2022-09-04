@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../views/dashboard.dart';
+import '../views/home_page.dart';
+import '../views/login_page.dart';
 import '../views/profile_page.dart';
 
 class MenuPopup extends StatelessWidget {
@@ -19,13 +21,12 @@ class MenuPopup extends StatelessWidget {
     return PopupMenuButton(
         onSelected: (value) async {
           if (value == 'Logout') {
-            FirebaseAuth.instance.signOut();
+            FirebaseAuth.instance.signOut().then<void>((value) =>
+                Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+                    builder: (context) => const LoginPage())));
           } else if (value == 'My Account') {
             Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
                 builder: (context) => const ProfilePage()));
-          } else {
-            Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
-                builder: (context) => const Dashboard()));
           }
         },
         padding: EdgeInsets.zero,

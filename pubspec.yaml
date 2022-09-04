@@ -14,7 +14,6 @@ dependencies:
   firebase_auth: ^3.3.20
   firebase_storage: ^10.2.18
 
-  flutter_local_notifications: ^9.4.1
   image_picker: ^0.8.5+3
   reactive_forms: ^13.0.0
   shared_preferences: ^2.0.15
@@ -24,6 +23,7 @@ dependencies:
   carousel_slider: ^4.1.1
   intl: ^0.17.0
   flutter_native_splash: ^2.2.4
+  awesome_notifications: ^0.6.21
 
 dev_dependencies:
   flutter_test:

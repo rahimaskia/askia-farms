@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../widgets/items_count_cards.dart';
 import '../widgets/sticky_tabbed_sliver_app_bar.dart';
 import 'home_page.dart';
+import 'login_page.dart';
 import 'mortality.dart';
 import 'partials/expenses.dart';
 import 'partials/orders.dart';
@@ -24,7 +25,7 @@ class _IndexState extends State<Index> {
     'suppliers',
     'expenses',
     'orders',
-    'customers',
+    'users',
     'products'
   ];
   final _tabViews = const [
@@ -45,14 +46,20 @@ class _IndexState extends State<Index> {
         actions: [
           IconButton(
               tooltip: 'Marketplace',
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute<void>(
-                      builder: (context) => MarketPlace(user: user))),
+              onPressed: () =>
+                  Navigator.of(context).push(MaterialPageRoute<void>(
+                      builder: (context) => MarketPlace(
+                            user: user,
+                            isAdmin: true,
+                          ))),
               icon: const Icon(Icons.shopping_bag)),
           IconButton(
               tooltip: 'Log out',
               onPressed: () {
-                FirebaseAuth.instance.signOut();
+                FirebaseAuth.instance.signOut().then<void>((value) =>
+                    Navigator.of(context).push<dynamic>(
+                        MaterialPageRoute<dynamic>(
+                            builder: (context) => const LoginPage())));
               },
               icon: const Icon(Icons.logout))
         ],

@@ -14,7 +14,6 @@ class Customers extends StatelessWidget {
   Widget build(BuildContext context) {
     final query = FirebaseFirestore.instance
         .collection('users')
-        .where('isAdmin', isEqualTo: false)
         .withConverter<User>(
             fromFirestore: (s, _) => User.fromMap(s.data()!),
             toFirestore: (u, _) => u.toMap())
@@ -36,7 +35,7 @@ class Customers extends StatelessWidget {
                   const DataColumn(label: Text('Name')),
                   const DataColumn(label: Text('Email')),
                   const DataColumn(label: Text('Phone')),
-                  const DataColumn(label: Text('Delete')),
+                  const DataColumn(label: Text('Actions')),
                 ],
                 source: UsersData(users, context: context));
           } else if (snapshot.hasError) {

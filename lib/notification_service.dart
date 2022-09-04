@@ -1,129 +1,72 @@
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
-import 'package:timezone/timezone.dart' as timezone;
-import 'package:timezone/data/latest.dart' as timezoneData;
+import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/material.dart';
 
 class NotificationService {
-  static final NotificationService _notificationService =
-      NotificationService._internal();
-
-  final _localNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  factory NotificationService() {
-    return _notificationService;
-  }
-  NotificationService._internal();
-
-  timezone.TZDateTime _nextInstanceOfTenAM() {
-    final now = timezone.TZDateTime.now(timezone.local);
-    var scheduledDate =
-        timezone.TZDateTime(timezone.local, now.year, now.month, now.day, 10);
-    if (scheduledDate.isBefore(now)) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
-
-  timezone.TZDateTime _nextInstanceOfMondayTenAM() {
-    var scheduledDate = _nextInstanceOfTenAM();
-    while (scheduledDate.weekday != DateTime.monday) {
-      scheduledDate = scheduledDate.add(const Duration(days: 1));
-    }
-    return scheduledDate;
-  }
-
-  Future<void> init() async {
-    const androidSetting = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const iosSetting = IOSInitializationSettings(requestSoundPermission: true);
-
-    const initSettings =
-        InitializationSettings(android: androidSetting, iOS: iosSetting);
-
-    await _localNotificationsPlugin.initialize(initSettings);
+  void init() {
+    AwesomeNotifications().initialize(
+        // set the icon to null if you want to use the default app icon
+        null,
+        [
+          NotificationChannel(
+              channelGroupKey: 'feed_channel_group',
+              channelKey: 'feed_channel',
+              channelName: 'Feed notifications',
+              channelDescription: 'Notification channel for feeds',
+              defaultColor: Colors.indigo,
+              ledColor: Colors.red),
+          NotificationChannel(
+              channelGroupKey: 'drug_channel_group',
+              channelKey: 'drug_channel',
+              channelName: 'Drug administration notifications',
+              channelDescription:
+                  'Notification channel for drug administrations',
+              defaultColor: Colors.pink,
+              ledColor: Colors.green)
+        ],
+        // Channel groups are only visual and are not required
+        channelGroups: [
+          NotificationChannelGroup(
+              channelGroupkey: 'feed_channel_group',
+              channelGroupName: 'Feed group'),
+          NotificationChannelGroup(
+              channelGroupkey: 'drug_channel_group',
+              channelGroupName: 'Drug group')
+        ],
+        debug: true);
   }
 
-  void notify(
+  void requestNotificationPermission() {
+    AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+      if (!isAllowed) {
+        // This is just a basic example. For real apps, you must show some
+        // friendly dialog box before call the request method.
+        // This is very important to not harm the user experience
+        AwesomeNotifications().requestPermissionToSendNotifications();
+      }
+    });
+  }
+
+  Future<void> notify(
     String title,
-    String body,
-    int id,
-    int endTime, {
-    String sound = '',
-    String channel = 'default',
-    DateTimeComponents matchDateTime = DateTimeComponents.time,
+    String body, {
+    required String channel,
+    int? id,
+    required int time,
   }) async {
-    timezoneData.initializeTimeZones();
-
-    final scheduleTime =
-        timezone.TZDateTime.fromMillisecondsSinceEpoch(timezone.local, endTime);
-
-    final iosDetail = sound == ''
-        ? null
-        : IOSNotificationDetails(presentSound: true, sound: sound);
-
-    final soundFile = sound.replaceAll('.mp3', '');
-    final notificationSound =
-        sound == '' ? null : RawResourceAndroidNotificationSound(soundFile);
-
-    final androidDetail = AndroidNotificationDetails(channel, channel,
-        playSound: true, sound: notificationSound);
-
-    final noticeDetail = NotificationDetails(
-      iOS: iosDetail,
-      android: androidDetail,
-    );
-
-    await _localNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      scheduleTime,
-      noticeDetail,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-      matchDateTimeComponents: matchDateTime,
-    );
-  }
-
-  void notifyMonthly(
-    String title,
-    String body,
-    int id, {
-    String sound = '',
-    String channel = 'monthly_deworm',
-  }) async {
-    timezoneData.initializeTimeZones();
-
-    final iosDetail = sound == ''
-        ? null
-        : IOSNotificationDetails(presentSound: true, sound: sound);
-
-    final soundFile = sound.replaceAll('.mp3', '');
-    final notificationSound =
-        sound == '' ? null : RawResourceAndroidNotificationSound(soundFile);
-
-    final androidDetail = AndroidNotificationDetails(channel, channel,
-        playSound: true, sound: notificationSound);
-
-    final noticeDetail = NotificationDetails(
-      iOS: iosDetail,
-      android: androidDetail,
-    );
-
-    await _localNotificationsPlugin.zonedSchedule(
-      id,
-      title,
-      body,
-      _nextInstanceOfMondayTenAM(),
-      noticeDetail,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle: true,
-      matchDateTimeComponents: DateTimeComponents.dayOfMonthAndTime,
-    );
-  }
-
-  void cancelAll() {
-    _localNotificationsPlugin.cancelAll();
+    final localTimeZone =
+        await AwesomeNotifications().getLocalTimeZoneIdentifier();
+    AwesomeNotifications().createNotification(
+        content: NotificationContent(
+            wakeUpScreen: true,
+            category: NotificationCategory.Reminder,
+            id: id ?? 10,
+            channelKey: channel,
+            title: title,
+            body: body),
+        schedule: NotificationInterval(
+            interval: (60 * 60 * 24) - (time * 60),
+            timeZone: localTimeZone,
+            allowWhileIdle: true,
+            repeats: true));
   }
 }

@@ -7,14 +7,21 @@ import 'feeds.dart';
 import 'index.dart';
 
 class Dashboard extends StatefulWidget {
-  const Dashboard({Key? key}) : super(key: key);
+  const Dashboard({Key? key, this.index = 0}) : super(key: key);
+  final int? index;
 
   @override
   _DashboardState createState() => _DashboardState();
 }
 
 class _DashboardState extends State<Dashboard> {
-  int _index = 0;
+  late int _index;
+
+  @override
+  void initState() {
+    _index = widget.index ?? 0;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +31,8 @@ class _DashboardState extends State<Dashboard> {
           children: const [Index(), Birds(), Drugs(), Feeds(), Eggs()],
         ),
         bottomNavigationBar: BottomNavigationBar(
-            selectedItemColor: Colors.black,
-            unselectedItemColor: Colors.black54,
+            // selectedItemColor: Colors.black,
+            // unselectedItemColor: Colors.black54,
             showUnselectedLabels: true,
             onTap: (tappedItemIndex) => setState(() {
                   _index = tappedItemIndex;
