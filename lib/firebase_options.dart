@@ -63,6 +63,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '426121446164',
     projectId: 'askia-farms',
     storageBucket: 'askia-farms.appspot.com',
+    androidClientId: '426121446164-826ebtu8du0qn826nubbcp82tev0jo8u.apps.googleusercontent.com',
     iosClientId: '426121446164-e1ar9ogddi8ndboe913q28o0nuhrmnlm.apps.googleusercontent.com',
     iosBundleId: 'com.askia.farms',
   );
