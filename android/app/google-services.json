@@ -14,11 +14,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "426121446164-826ebtu8du0qn826nubbcp82tev0jo8u.apps.googleusercontent.com",
+          "client_id": "426121446164-6fqbbku2blc7hnqkio6p6tnuvqelrf3v.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.askia.farms",
-            "certificate_hash": "f3409168092d517e6ce8a1c2aadbeb168777f083"
+            "certificate_hash": "1092e6740d0eb156c7ab4558825a6bdc7ace4137"
           }
         },
         {
