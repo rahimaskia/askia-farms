@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../views/dashboard.dart';
-import '../views/home_page.dart';
-import '../views/login_page.dart';
+import '../views/login_page.dart' show LoginPage;
 import '../views/profile_page.dart';
 
 class MenuPopup extends StatelessWidget {

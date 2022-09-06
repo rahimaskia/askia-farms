@@ -72,6 +72,7 @@ class _LoginPageState extends State<LoginPage>
           'phone': value.user?.phoneNumber
         });
       }
+    // ignore: invalid_return_type_for_catch_error
     }).catchError((Object err) => debugPrint(err.toString()));
   }
 
